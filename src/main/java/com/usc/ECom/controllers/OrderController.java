@@ -1,0 +1,37 @@
+package com.usc.ECom.controllers;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.usc.ECom.beans.Order;
+import com.usc.ECom.dao.OrderDao;
+import com.usc.ECom.http.Response;
+import com.usc.ECom.service.OrderService;
+
+@RestController
+@RequestMapping("/orders")
+public class OrderController {
+	@Autowired
+	private	OrderDao orderDao;
+	@Autowired
+	private OrderService orderService;
+	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	public List<Order> getOrders(){
+		return orderDao.findAll(); 
+	}
+// find all a user's orders?
+	
+	@DeleteMapping("/{id}")
+	public Response deleteOrder(@PathVariable int id) {
+		return orderService.deleteOrder(id);
+	}
+
+}
