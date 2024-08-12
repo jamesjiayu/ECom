@@ -7,6 +7,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,16 +25,29 @@ public class OrderController {
 	private	OrderDao orderDao;
 	@Autowired
 	private OrderService orderService;
+	
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public List<Order> getOrders(){
 		return orderDao.findAll(); 
 	}
-// find all a user's orders?
+// find all a user's orders? a user have many orders
 	
 	@DeleteMapping("/{id}")
 	public Response deleteOrder(@PathVariable int id) {
 		return orderService.deleteOrder(id);
+	}
+	
+	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_USER')")
+	public Response addOrder(@RequestBody Order order) {
+		return orderService.addOrder(order);
+	}
+	
+	@PutMapping
+	@PreAuthorize("hasAuthority('ROLE_USER')")
+	public Response changeOrder(@RequestBody Order order) {
+		return orderService.changeOrder(order);
 	}
 
 }

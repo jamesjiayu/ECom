@@ -42,4 +42,5 @@ public class UserDetailController {
 	public Response changeUserDetail(UserDetail userDetail) {
 		return userDetailService.changeUserDetail(userDetail);
 	}
+	
 }

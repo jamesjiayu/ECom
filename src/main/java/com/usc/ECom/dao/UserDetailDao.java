@@ -6,4 +6,6 @@ import com.usc.ECom.beans.UserDetail;
 
 public interface UserDetailDao extends JpaRepository<UserDetail, Integer> {
 
+	UserDetail findByEmail(String email);
+
 }

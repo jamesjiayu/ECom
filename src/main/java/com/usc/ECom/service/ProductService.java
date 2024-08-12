@@ -50,10 +50,21 @@ public class ProductService {
         }
     }
     public Response AddNewProduct(Product product) {
-        System.out.println(product);
+//        System.out.println(product); //what if fields are null?
         productDao.save(product);
         return new Response(true);
     }
+
+	public Response changeProduct(Product product) {
+		Product productInDB = productDao.findById(product.getId()).orElseThrow();
+		productInDB.setName(product.getName());
+		productInDB.setBrand(product.getBrand());////////????????if Brand is null?
+		productInDB.setImage(product.getImage());//????????
+		productInDB.setPrice(product.getPrice());
+		productInDB.setStock(product.getStock());
+		productDao.save(productInDB);
+		return new Response(true);
+	}
 
 
 }

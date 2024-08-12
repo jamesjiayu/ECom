@@ -13,9 +13,7 @@ import com.usc.ECom.http.Response;
 public class UserDetailService {
 	@Autowired
 	private UserDetailDao userDetailDao;
-	@Autowired
-	private UserDetail userDetail;
-	
+
 	public Response	 deteleUserDetail(int id) {
 		if(userDetailDao.findById(id).isPresent()) {
 			userDetailDao.deleteById(id);
@@ -26,13 +24,27 @@ public class UserDetailService {
 	}
 	
 	public Response addUserDetail(UserDetail userDetail) {
-//how to find the user in user table and put user_id in here?
-		userDetailDao.save(userDetail);
-		return new Response(true);
-	}
-	public Response changeUserDetail(UserDetail userDetail) {
-		//if(userDetail.getEmail(),equals(userDetail))
-		return new Response(true);
+		//email in DB is null && emails different: if emails same, return false 
+		//!userDetailDao.findByEmail(userDetailInDB.getEmail()).equals(userDetail.getEmail())) 
+		//userDetailDao.findById(userDetailInDB.getId()).isEmpty()
+		UserDetail userDetailInDB= userDetailDao.findByEmail(userDetail.getEmail());
+		if(userDetailInDB.getEmail().isEmpty()){ 
+			userDetailDao.save(userDetail);
+			return new Response(true);	
+		}else {
+			return new Response(false,"The user's email has already been registered.");
+		}
 		
+	}
+	
+	public Response changeUserDetail(UserDetail userDetail) {
+		UserDetail userDetailInDB= userDetailDao.findByEmail(userDetail.getEmail());
+		if(userDetailInDB.getEmail().isEmpty()){ 
+			//check if name is null or not???????? frontend should do it
+			return new Response(false, "The user's email is not in the system");
+		}else {
+			userDetailDao.save(userDetail);
+			return new Response(true);
+		}
 	}
 }

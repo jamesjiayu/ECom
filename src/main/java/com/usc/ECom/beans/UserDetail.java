@@ -1,6 +1,7 @@
 package com.usc.ECom.beans;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name="usc_user_detail")
@@ -11,12 +12,12 @@ public class UserDetail {
     @SequenceGenerator(name = "USER_DETAIL_SEQ_GEN",  sequenceName = "USER_DETAIL_SEQ", allocationSize = 1)
 	private int id;
 	@Column
-	@NotEmpty
+	@NotNull
 	private String name;
 	@Column
 	private String phone;
 	@Column
-	@NotEmpty
+	@NotNull
 	private String email;
 	@Column
 	private String address1;

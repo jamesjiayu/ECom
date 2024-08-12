@@ -16,6 +16,7 @@ public class OrderService {
 	
 	public Response addOrder(Order order) {
 		//??????????????????????????/ lot of tables!!!!!
+		orderDao.save(order);
 		return new Response(true);
 	}
 	
@@ -25,8 +26,19 @@ public class OrderService {
 			return new Response(true);
 		}else {
 			return new Response(false,"The Order is not found.");
-		}
+		}	
 		
+	}
+	
+	public Response changeOrder(Order order) {
+		Order orderInDB = orderDao.findById(order.getId()).orElseThrow();
+		//????frontend gave the id?
+		if(orderDao.findById(orderInDB.getId()).isPresent()) {
+			orderDao.save(order);
+			return new Response(true);
+		}else {
+			return new Response(false,"The order is not present!");
+		}		
 		
 	}
 
