@@ -30,7 +30,8 @@ public class UserDetail {
 	@Column 
 	private String zipcode;
 	
-	@JoinColumn(name="user_id")
+	@PrimaryKeyJoinColumn(name="user_id")
+	//@JoinColumn(name="user_id")
 	@Column
 	@OneToOne
 	private	User User;
