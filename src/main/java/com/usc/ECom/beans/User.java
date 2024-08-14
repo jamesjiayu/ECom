@@ -32,7 +32,7 @@ public class User implements UserDetails {
         inverseJoinColumns = { @JoinColumn(name = "user_profile_id", referencedColumnName = "id") }
     )
     private List<UserProfile> profiles = new ArrayList<UserProfile>();
-    //?// @PrimaryKeyJoinColumn
+//in User.java:
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserDetail userDetail;
 

@@ -1,4 +1,6 @@
 package com.usc.ECom.beans;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+//import com.usc.ECom.beans.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -30,24 +32,24 @@ public class UserDetail {
 	@Column 
 	private String zipcode;
 	
-	@PrimaryKeyJoinColumn(name="user_id")
-	//@JoinColumn(name="user_id")
-	@Column
+	//in UserDetail.java:
+	@JoinColumn(name="user_id")
 	@OneToOne
-	private	User User;
+	@JsonIgnore
+	private	User user; // com.usc.ECom.beans.User 
 	//gender, women:0, men: 1. converter if necessary, ex: it's enum in java, but in db it's...
 	public UserDetail() {}
 	
-	public UserDetail(int id, @NotEmpty String name, @NotEmpty String email, com.usc.ECom.beans.User user) {
+	public UserDetail(int id, @NotEmpty String name, @NotEmpty String email, User user1) { // com.usc.ECom.beans.User 
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
-		User = user;//why no this.User? cuz it's class?
+		user = user1;//why no this.User? cuz it's class?
 	}
 
 	public UserDetail(int id, @NotEmpty String name, String phone, @NotEmpty String email, String address1,
-			String address2, String state, String city, String zipcode, com.usc.ECom.beans.User user) {
+			String address2, String state, String city, String zipcode,User user1) {// com.usc.ECom.beans.User 
 		super();
 		this.id = id;
 		this.name = name;
@@ -58,7 +60,7 @@ public class UserDetail {
 		this.state = state;
 		this.city = city;
 		this.zipcode = zipcode;
-		User = user;
+		user = user1;
 	}
 
 	public int getId() {
@@ -134,18 +136,18 @@ public class UserDetail {
 	}
 
 	public User getUser() {
-		return User;
+		return user;
 	}
 
-	public void setUser(User user) {
-		User = user;
+	public void setUser(User user1) {// com.usc.ECom.beans.User 
+		user = user1;
 	}
 
 	@Override
 	public String toString() {
 		return "UserDetail [id=" + id + ", name=" + name + ", phone=" + phone + ", email=" + email + ", address1="
 				+ address1 + ", address2=" + address2 + ", state=" + state + ", city=" + city + ", zipcode=" + zipcode
-				+ ", User=" + User + "]";
+				+ ", User=" + user + "]";
 	}
 	
 }
