@@ -56,9 +56,10 @@ public class Order {
         return id;
     }
 
-    public void setid(int orderId) {
-        this.id = orderId;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
+
 
     public User getUser() {
         return user;
@@ -89,9 +90,6 @@ public class Order {
 	}
 
 
-	public void setId(int id) {
-		this.id = id;
-	}
 
 
 	@Override

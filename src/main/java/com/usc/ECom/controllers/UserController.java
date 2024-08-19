@@ -32,7 +32,7 @@ public class UserController {
                     .accessDeniedHandler(accessDeniedHandlerImpl).and()
  * */
     @GetMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")// how to use the AccessDeniedHandlerImpl? just a @PreAuthorize!
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")// check authenticationEntryPointImpl, then the AccessDeniedHandlerImpl? just a @PreAuthorize!
     public List<User> getUsers() {
     	return userDao.findAll(); //service then dao
     }
@@ -40,18 +40,18 @@ public class UserController {
 //    	return userService.findAll();
 //    }    
 
-    @PostMapping
+    @PostMapping ////login first? and preauthorize. or everyone can do it. same as delete
     public Response addUser(@RequestBody User user) { //Json
         return userService.register(user); //registerAdm(user)
     }
 
     @PutMapping //("/{id}") //who change it?// only can change it by himself?//
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
-    public Response changeUser(@RequestBody User user, Authentication authentication) {// Authentication? put in body?
+    public Response changeUser(@RequestBody User user, Authentication authentication) {
         return userService.changePassword(user, authentication);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") //login first? and preauthorize. or everyone can do it.
     public Response deletUser(@PathVariable int id) {
     	return userService.deleteUser(id);
     }

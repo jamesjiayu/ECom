@@ -21,13 +21,13 @@ public class ProductService {
 	@Autowired
 	private ProductDao productDao;
 	
-    public Response findAll() { 
-   	 List<Product> productList = productDao.findAll();
-        if (CollectionUtils.isEmpty(productList)) {
-       	 return new Response(true,200, "But no Product is here!");
-        }
-        return new Response(true, 200, "");
-   }
+//    public Response findAll() { 
+//   	 List<Product> productList = productDao.findAll();
+//        if (CollectionUtils.isEmpty(productList)) {
+//       	 return new Response(true,200, "But no Product is here!");
+//        }
+//        return new Response(true, 200, "");
+//   }
 	
 	public Response getPorductById(int id) {
         if (!productDao.findById(id).isEmpty()) {
@@ -56,7 +56,7 @@ public class ProductService {
     }
 
 	public Response changeProduct(Product product) {
-		Product productInDB = productDao.findById(product.getId()).orElseThrow();
+		Product productInDB = productDao.findById(product.getId()).orElseThrow(RuntimeException:: new);
 		productInDB.setName(product.getName());
 		productInDB.setBrand(product.getBrand());////////????????if Brand is null?
 		productInDB.setImage(product.getImage());//????????

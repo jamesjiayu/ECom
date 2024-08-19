@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,9 +27,16 @@ public class OrderController {
 	@Autowired
 	private OrderService orderService;
 	
+	@GetMapping("/{id}")
+	public Order getOrder(@PathVariable int id){
+		return orderService.findById(id);//.get(); 
+	}
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public List<Order> getOrders(){
+//	public List<Order> getOrders(Authentication authentication){ // SecurityUtils.isAdmin()????how to write!!
+//		return orderService.getOrders(authentication);
+//	}
+	public List<Order> getOrders(){ 
 		return orderDao.findAll(); 
 	}
 // find all a user's orders? a user have many orders
@@ -39,15 +47,15 @@ public class OrderController {
 	}
 	
 	@PostMapping
-	@PreAuthorize("hasAuthority('ROLE_USER')")
-	public Response addOrder(@RequestBody Order order) {
-		return orderService.addOrder(order);
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
+	public Response addOrder(@RequestBody Order order, Authentication authentication) {
+		return orderService.addOrder(order,authentication);
 	}
 	
 	@PutMapping
-	@PreAuthorize("hasAuthority('ROLE_USER')")
-	public Response changeOrder(@RequestBody Order order) {
-		return orderService.changeOrder(order);
+	@PreAuthorize("hasAuthority('ROLE_USER' , 'ROLE_USER')")
+	public Response editOrder(@RequestBody Order order) {
+		return orderService.editOrder(order);
 	}
 
 }

@@ -30,10 +30,12 @@ public class UserDetailController {
 		return userDetailDao.findAll();
 	}
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
 	public Response deleteUserDetail(@PathVariable int id	) {
 		return userDetailService.deteleUserDetail(id);
 	}
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_USER')")
 	public Response addUserDetail(@RequestBody UserDetail userDetail) {
 		return userDetailService.addUserDetail(userDetail);
 	}

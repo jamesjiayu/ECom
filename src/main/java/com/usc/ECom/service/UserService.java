@@ -43,7 +43,7 @@ public class UserService {
         return new Response(true);
     }
     
-  //  @Transactional //roll back if something wrong
+  // what if something wrong, Respone(false)?
     public Response changePassword(User user, Authentication authentication) {
         if (user.getUsername().equals(authentication.getName()) || isAdmin(authentication.getAuthorities())) {
             User u = userDao.findByUsername(user.getUsername());

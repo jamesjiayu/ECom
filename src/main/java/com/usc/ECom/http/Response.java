@@ -3,27 +3,7 @@ public class Response  { //Response <T>
     private boolean success;
     private int code;
     private String message;
-	//private T data;
-    
-/*    
- *  data , static newSuccess and newFail, how to make it simpler and get together?
-    private T data;
-    public static <K> Response<K> newSuccess(K data) {
-        Response<K> response = new Response<>();
-        response.setData(data);
-        response.setSuccess(true);
-        return response;
-    }
-
-    public static Response<Void> newFail(String errorMsg) {
-        Response<Void> response = new Response<>();
-        response.setMessage(errorMsg);
-        response.setSuccess(false);
-        return response;
-    }
-
-*/      
-    
+	//private T data;    
     public Response(boolean success, String message) {
         super();
         this.success = success;
@@ -82,6 +62,25 @@ public class Response  { //Response <T>
         return "Response [success=" + success + ", code=" + code + ", message=" + message + "]"; // ", data=" + data + 
     }
 }
+
+/*    
+*  data , static newSuccess and newFail, how to make it simpler and get together?
+ private T data;
+ public static <K> Response<K> newSuccess(K data) {
+     Response<K> response = new Response<>();
+     response.setData(data);
+     response.setSuccess(true);
+     return response;
+ }
+
+ public static Response<Void> newFail(String errorMsg) {
+     Response<Void> response = new Response<>();
+     response.setMessage(errorMsg);
+     response.setSuccess(false);
+     return response;
+ }
+
+*/      
 
 /*
  * 
