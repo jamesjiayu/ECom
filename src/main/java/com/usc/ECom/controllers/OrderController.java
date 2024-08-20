@@ -22,8 +22,8 @@ import com.usc.ECom.service.OrderService;
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
-	@Autowired
-	private	OrderDao orderDao;
+//	@Autowired
+//	private	OrderDao orderDao;
 	@Autowired
 	private OrderService orderService;
 	
@@ -32,15 +32,15 @@ public class OrderController {
 		return orderService.findById(id);//.get(); 
 	}
 	@GetMapping
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-//	public List<Order> getOrders(Authentication authentication){ // SecurityUtils.isAdmin()????how to write!!
-//		return orderService.getOrders(authentication);
-//	}
-	public List<Order> getOrders(){ 
-		return orderDao.findAll(); 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
+	public List<Order> getOrders(Authentication authentication){
+	return orderService.getOrders(authentication);
 	}
+//	public List<Order> getOrders(){ 
+//	return orderDao.findAll(); 
+//}
 // find all a user's orders? a user have many orders
-	
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
 	@DeleteMapping("/{id}")
 	public Response deleteOrder(@PathVariable int id) {
 		return orderService.deleteOrder(id);
@@ -53,7 +53,7 @@ public class OrderController {
 	}
 	
 	@PutMapping
-	@PreAuthorize("hasAuthority('ROLE_USER' , 'ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
 	public Response editOrder(@RequestBody Order order) {
 		return orderService.editOrder(order);
 	}

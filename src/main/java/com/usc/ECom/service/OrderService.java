@@ -28,9 +28,8 @@ public class OrderService {
 	private UserDao userDao;
 	@Autowired
 	private ProductDao productDao;
-	public void deleteOrderProducts (List<OrderProduct> purchases) {
-		orderProductDao.deleteAll(purchases);
-	}
+	
+
 	public Response addOrder(Order order, Authentication authentication) {
 		try {
 			List<OrderProduct> purchases=order.getPurchases();
@@ -58,13 +57,17 @@ public class OrderService {
 		
 	}
 	
-	public Response editOrder(Order order) {
-		
+	public Response editOrder(Order order) {		
 		try {
 			Order orderInDB = orderDao.findById(order.getId()).orElseThrow(RuntimeException:: new);
-			List<OrderProduct> purchasesToRemove= orderInDB.getPurchases();
+			//List<OrderProduct> purchasesToRemove= orderInDB.getPurchases();//????????????????????????? logic??????
 			List<OrderProduct> purchases=order.getPurchases();
-
+			purchases.forEach(orderProduct->{
+				Product product= productDao.findById(orderProduct.getId()).orElseThrow(RuntimeException:: new);
+				orderProduct.setProduct(product);
+				orderProduct.setOrder(order);	
+				orderProduct.setQuantity(orderProduct.getQuantity());
+			});
 			orderDao.save(order);
 			return new Response(true);
 		} catch (Exception e) {
@@ -73,17 +76,17 @@ public class OrderService {
 		}
 	}
 	
-	//????frontend gave the id?
 //	if(orderDao.findById(orderInDB.getId()).isPresent()) {
-
 	public Order findById(int id) {
-		return (Order)orderDao.findById(id).get();//orElseThrow();
+		return (Order)orderDao.findById(id).get();
 	}
 
 
 	public List<Order> getOrders(Authentication authentication) {
-		//if(SecurityUtils.isAdmin())//?????????????????????????? isAdmin()!!!!!
-		return null;
+		if(SecurityUtils.isAdmin(authentication.getAuthorities())){
+			return (List<Order>)orderDao.findAll();//why (List<Order>) ? return null?or sth else?
+		}
+		return orderDao.findByUserId(userDao.findByUsername(authentication.getName()).getId());
 	}
 
 }

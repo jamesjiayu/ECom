@@ -35,13 +35,19 @@ public class OrderProductController {
     public Response addOrderProduct(@RequestBody OrderProduct orderproduct) { 
         return orderProductService.AddNewOrderProduct(orderproduct); 
     }
-	@DeleteMapping("/{id}")
-    public Response deletOrderProduct(@PathVariable int id) {
-    	return orderProductService.deleteOrderProduct(id);
-    }
+
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
 	@PutMapping
 	public Response changeOrderProduct(@RequestBody OrderProduct orderProduct) {
     	return orderProductService.changeProduct(orderProduct);
+    }
+//	@DeleteMapping("/{id}")
+//    public Response deletOrderProduct(@PathVariable int id) {
+//    	return orderProductService.deleteOrderProduct(id);
+//    }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
+    @DeleteMapping
+    public void deleteOrderProducts(List<OrderProduct> purchases) {
+    	orderProductService.deleteOrderProducts(purchases);
     }
 }

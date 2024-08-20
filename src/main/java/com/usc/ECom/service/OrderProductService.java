@@ -1,5 +1,7 @@
 package com.usc.ECom.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,16 +20,6 @@ public class OrderProductService {
 		orderProductDao.save(orderProduct);
         return new Response(true);
 	}
-
-	public Response deleteOrderProduct(int id) {
-        if (!orderProductDao.findById(id).isEmpty()) {
-        	orderProductDao.deleteById(id);
-            return new Response(true);
-        } else {
-            return new Response(false, "Product is not found!");
-        }
-	}
-
 	public Response changeProduct(OrderProduct orderProduct) {
 		OrderProduct OrderProductInDB = orderProductDao.findById(orderProduct.getId()).orElseThrow();
 		OrderProductInDB.setQuantity(orderProduct.getQuantity());//product s gone,if the quantity is 0.
@@ -35,5 +27,16 @@ public class OrderProductService {
 		orderProductDao.save(OrderProductInDB);
 		return new Response(true);
 	}
+	public void deleteOrderProducts (List<OrderProduct> purchases) {
+		orderProductDao.deleteAll(purchases);
+	}
 
 }
+//public Response deleteOrderProduct(int id) {
+//    if (!orderProductDao.findById(id).isEmpty()) {
+//    	orderProductDao.deleteById(id);
+//        return new Response(true);
+//    } else {
+//        return new Response(false, "Product is not found!");
+//    }
+//}
