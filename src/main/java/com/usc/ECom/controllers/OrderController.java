@@ -40,6 +40,7 @@ public class OrderController {
 //	return orderDao.findAll(); 
 //}
 // find all a user's orders? a user have many orders
+	
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
 	@DeleteMapping("/{id}")
 	public Response deleteOrder(@PathVariable int id) {
@@ -53,7 +54,7 @@ public class OrderController {
 	}
 	
 	@PutMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")//"hasAuthority('ROLE_USER')" , ONLY?
 	public Response editOrder(@RequestBody Order order) {
 		return orderService.editOrder(order);
 	}

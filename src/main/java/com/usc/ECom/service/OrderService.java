@@ -1,6 +1,7 @@
 package com.usc.ECom.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -27,8 +28,9 @@ public class OrderService {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private ProductDao productDao;
-	
+	private ProductDao productDao;	
+	@Autowired 
+ 	private OrderProductService orderProductService;
 
 	public Response addOrder(Order order, Authentication authentication) {
 		try {
@@ -40,35 +42,34 @@ public class OrderService {
 				orderProduct.setOrder(order);
 			});
 			order.setUser(userDao.findByUsername(authentication.getName()));//Auth is a interface, and no getName in itself, but should be in extends
-			orderDao.save(order);
+			orderDao.save(order);//only save(order), OP table change automatically.
 			return new Response(true);
 		} catch (Exception e) {
 			return new Response(false);
 		}
 	}
-	
-	public Response	deleteOrder(int id) {
-		if(orderDao.findById(id).isPresent()) {
-			orderDao.deleteById(id);
-			return new Response(true);
-		}else {
-			return new Response(false,"The Order is not found.");
-		}	
-		
-	}
-	
 	public Response editOrder(Order order) {		
 		try {
-			Order orderInDB = orderDao.findById(order.getId()).orElseThrow(RuntimeException:: new);
-			//List<OrderProduct> purchasesToRemove= orderInDB.getPurchases();//????????????????????????? logic??????
-			List<OrderProduct> purchases=order.getPurchases();
+			List<OrderProduct> purchases=order.getPurchases();// if purchases is []?// front just delete the order, back no need to worry
+			//Order orderInDB = orderDao.findById(order.getId()).orElseThrow(RuntimeException:: new);
+//			
+//			List<OrderProduct> purchasesToRemove= orderInDB.getPurchases();//can i remove all in DB first? but tables affected and performance bad
+//			List<OrderProduct> toRemove = purchasesToRemove.stream()
+//			        .filter(op -> !purchases.contains(op))
+//			        .collect(Collectors.toList());			
+			
 			purchases.forEach(orderProduct->{
-				Product product= productDao.findById(orderProduct.getId()).orElseThrow(RuntimeException:: new);
+				Product product= productDao.findById(orderProduct.getProduct().getId()).orElseThrow(RuntimeException:: new);
 				orderProduct.setProduct(product);
-				orderProduct.setOrder(order);	
-				orderProduct.setQuantity(orderProduct.getQuantity());
+				orderProduct.setOrder(order);	// no need to do it, right?
+				//orderProduct.setQuantity(orderProduct.getQuantity());	// no need to do it, right?//if qty is 0, front shouldn't pass the OP
 			});
+//			if(!toRemove.isEmpty()) {
+//				orderProductService.deleteOrderProducts(toRemove);//after deleting, list<OP> in order is []????? what's gonna happen to Order? is it ok?	
+//			}
+//			
 			orderDao.save(order);
+			
 			return new Response(true);
 		} catch (Exception e) {
 			//log4j
@@ -88,5 +89,17 @@ public class OrderService {
 		}
 		return orderDao.findByUserId(userDao.findByUsername(authentication.getName()).getId());
 	}
+	
+	public Response	deleteOrder(int id) {
+		if(orderDao.findById(id).isPresent()) {
+			orderDao.deleteById(id);
+			return new Response(true);
+		}else {
+			return new Response(false,"The Order is not found.");
+		}	
+		
+	}
+	
+	
 
 }
