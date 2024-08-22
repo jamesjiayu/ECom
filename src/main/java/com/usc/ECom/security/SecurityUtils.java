@@ -20,7 +20,7 @@ public class SecurityUtils {
         response.setStatus(status);
 
         // Create response object
-        Response responseObj = new Response(exception != null, status, message);
+        Response responseObj = new Response(exception == null, status, message);
         
         // Write JSON response
         writer.print(mapper.writeValueAsString(responseObj));

@@ -48,26 +48,27 @@ public class OrderService {
 			return new Response(false);
 		}
 	}
-	public Response editOrder(Order order) {		
+	public Response editOrder(Order order,Authentication authentication) {		
 		try {
 			List<OrderProduct> purchases=order.getPurchases();// if purchases is []?// front just delete the order, back no need to worry
-			//Order orderInDB = orderDao.findById(order.getId()).orElseThrow(RuntimeException:: new);
-//			
-//			List<OrderProduct> purchasesToRemove= orderInDB.getPurchases();//can i remove all in DB first? but tables affected and performance bad
-//			List<OrderProduct> toRemove = purchasesToRemove.stream()
-//			        .filter(op -> !purchases.contains(op))
-//			        .collect(Collectors.toList());			
-			
-			purchases.forEach(orderProduct->{
-				Product product= productDao.findById(orderProduct.getProduct().getId()).orElseThrow(RuntimeException:: new);
-				orderProduct.setProduct(product);
-				orderProduct.setOrder(order);	// no need to do it, right?
-				//orderProduct.setQuantity(orderProduct.getQuantity());	// no need to do it, right?//if qty is 0, front shouldn't pass the OP
-			});
-//			if(!toRemove.isEmpty()) {
-//				orderProductService.deleteOrderProducts(toRemove);//after deleting, list<OP> in order is []????? what's gonna happen to Order? is it ok?	
-//			}
-//			
+			Order orderInDB = orderDao.findById(order.getId()).orElseThrow(RuntimeException:: new);			
+			List<OrderProduct> purchasesToRemove= orderInDB.getPurchases();//can i remove all in DB first? but tables affected and performance bad
+			List<OrderProduct> toRemove = purchasesToRemove.stream()
+			        .filter(op -> !purchases.contains(op))
+			        .collect(Collectors.toList());			
+			if(!purchases.isEmpty()) {
+				purchases.forEach(orderProduct->{
+					Product product= productDao.findById(orderProduct.getProduct().getId()).orElseThrow(RuntimeException:: new);
+					orderProduct.setProduct(product);
+					orderProduct.setOrder(order);	// no need to do it, right?
+					//orderProduct.setQuantity(orderProduct.getQuantity());	// no need to do it, right?//if qty is 0, front shouldn't pass the OP
+				});
+				
+			}
+			if(!toRemove.isEmpty()) {
+				orderProductService.deleteOrderProducts(toRemove);//after deleting, list<OP> in order is []????? what's gonna happen to Order? is it ok?	
+			}
+			order.setUser(userDao.findByUsername(authentication.getName()));//auth is not Basic auth which I put into, its the JSession's relation to
 			orderDao.save(order);
 			
 			return new Response(true);

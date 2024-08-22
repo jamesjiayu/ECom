@@ -54,9 +54,9 @@ public class OrderController {
 	}
 	
 	@PutMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")//"hasAuthority('ROLE_USER')" , ONLY?
-	public Response editOrder(@RequestBody Order order) {
-		return orderService.editOrder(order);
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")//"hasAuthority('ROLE_USER')" , ONLY? no, only admin can do it
+	public Response editOrder(@RequestBody Order order,Authentication authentication) {
+		return orderService.editOrder(order, authentication);
 	}
 
 }

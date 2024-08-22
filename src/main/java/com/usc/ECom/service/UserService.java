@@ -42,8 +42,7 @@ public class UserService {
         userDao.save(user);
         return new Response(true);
     }
-    
-  // what if something wrong, Respone(false)?
+
     public Response changePassword(User user, Authentication authentication) {
         if (user.getUsername().equals(authentication.getName()) || isAdmin(authentication.getAuthorities())) {
             User u = userDao.findByUsername(user.getUsername());
