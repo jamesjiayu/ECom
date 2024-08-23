@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class SecurityUtils {
 
     private static final ObjectMapper mapper = new ObjectMapper();
-
+  //what exception should be here? IOException?
     public static void sendResponse(HttpServletResponse response, int status, String message, Exception exception) throws IOException {
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter writer = response.getWriter();
@@ -21,9 +21,9 @@ public class SecurityUtils {
 
         // Create response object
         Response responseObj = new Response(exception == null, status, message);
-        
+        //why 2 reponses? and must? HttpServletResponse.setContentType
         // Write JSON response
-        writer.print(mapper.writeValueAsString(responseObj));
+        writer.print(mapper.writeValueAsString(responseObj));//what's mapper?
         writer.flush();
         writer.close();
     }

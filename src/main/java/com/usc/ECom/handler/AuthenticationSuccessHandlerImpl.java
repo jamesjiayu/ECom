@@ -12,10 +12,11 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class AuthenticationSuccessHandlerImpl extends SimpleUrlAuthenticationSuccessHandler {
-
+//why no autowired  SecurityUtils, when must autowire sth?
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        SecurityUtils.sendResponse(response, HttpServletResponse.SC_OK, "Login successful", null);
+    	//what exception should be here?
+        SecurityUtils.sendResponse(response, HttpServletResponse.SC_OK, "Login successful", null); //SC_OK is code: int 200
     }
 }

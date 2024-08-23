@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,13 +37,13 @@ public class UserDetailController {
 	}
 	@PostMapping
 	@PreAuthorize("hasAuthority('ROLE_USER')")
-	public Response addUserDetail(@RequestBody UserDetail userDetail) {
-		return userDetailService.addUserDetail(userDetail);
+	public Response addUserDetail(@RequestBody UserDetail userDetail, Authentication authentication) { //how to use form ? @ xyz... had to?
+		return userDetailService.addUserDetail(userDetail, authentication);
 	}
 	@PutMapping
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
-	public Response changeUserDetail(UserDetail userDetail) {
-		return userDetailService.changeUserDetail(userDetail);
+	public Response changeUserDetail(@RequestBody UserDetail userDetail  , Authentication authentication ) {
+		return userDetailService.changeUserDetail(userDetail, authentication );
 	}
 	
 }
