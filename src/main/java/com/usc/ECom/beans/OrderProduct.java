@@ -23,7 +23,7 @@ public class OrderProduct {
 //    LAZY: The child entities are loaded only when explicitly accessed. This can improve performance but can lead to LazyInitializationException if not handled correctly.
     @ManyToOne(fetch = FetchType.EAGER)//diff from LAZY?
     @JoinColumn(name = "order_id")
-    @JsonIgnoreProperties("purchases")// not a 注入
+    @JsonIgnoreProperties("purchases")// not a 注入 // how not to show the date in response body? in postman
     private Order order;
 
     @ManyToOne(fetch = FetchType.EAGER)//@OneToMany?
