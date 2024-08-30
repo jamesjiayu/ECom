@@ -47,7 +47,7 @@ public class OrderServiceTest {
 	@InjectMocks// no need?
 	private OrderService orderService;
 	@Test
-	public void deleteOrderById() {
+	public void testDeleteOrderById() {
 		int id=1;
 		Order mockOrder= Mockito.mock(Order.class);
 		when (orderDao.findById(id)).thenReturn(Optional.of(mockOrder));
@@ -137,7 +137,7 @@ public class OrderServiceTest {
 	}
 
 	@Test
-	public void findOrderById_WhenOrderExist() {
+	public void testFindOrderById_WhenOrderExist() {
 		int id = 1;
 		Order mockOrder = Mockito.mock(Order.class);
 		// when((Order)orderDao.findById(id).get()).thenReturn(mockOrder); //get()
@@ -150,7 +150,7 @@ public class OrderServiceTest {
 	}
 
 	@Test
-	public void findOrderById_WhenOrderNotExist() {
+	public void testFindOrderById_WhenOrderNotExist() {
 		int id = 2;
 		Mockito.mock(Order.class);// Order mockOrder=
 		when(orderDao.findById(id)).thenReturn(Optional.empty());
