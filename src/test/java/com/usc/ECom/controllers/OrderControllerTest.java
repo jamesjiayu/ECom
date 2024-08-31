@@ -96,4 +96,16 @@ public class OrderControllerTest {
 
 	}
 
+	@Test
+	public void testGetOrderById() throws Exception {
+		int id=1; 
+		Order order1 = new Order(new Date(), new ArrayList<>());
+		order1.setId(id);
+		given(orderService.findById(anyInt())).willReturn(order1);
+		mockMvc.perform(MockMvcRequestBuilders.get("/orders/{id}", id)
+				.with(user("aaa").roles("USER"))
+				)
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id", CoreMatchers.is(1)));
+	}
 }
